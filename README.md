@@ -1,2 +1,2 @@
-# -nterned-Based-Programming
+# Interned-Based-Programming
 proje
