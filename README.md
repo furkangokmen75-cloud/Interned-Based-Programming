@@ -1,2 +1,0 @@
-# Interned-Based-Programming
-proje
