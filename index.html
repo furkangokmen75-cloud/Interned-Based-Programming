@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lezzet Rehberi — Restoranları Keşfet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <p class="brand-eyebrow">🍽 Yemek Rehberi</p>
+  <h1>Lezzet <em>Rehberi</em></h1>
+  <p class="tagline">Çevrendeki en iyi restoranları, kafeleri ve tatlıcıları keşfet</p>
+  <div class="search-wrap">
+    <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="search-input" placeholder="Restoran veya mutfak türü ara…">
+    <button class="search-location" id="loc-btn">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+      Konumumu Kullan
+    </button>
+  </div>
+</header>
+
+<div class="location-banner" id="loc-banner">
+  <div class="location-pill">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+    <span id="loc-text">Konum alınıyor…</span>
+  </div>
+</div>
+
+<div class="controls">
+  <span class="controls-label">Kategori</span>
+  <div class="filter-group" id="cat-filters">
+    <button class="filter-btn active" data-cat="all">Tümü</button>
+    <button class="filter-btn" data-cat="food">
+      <span class="dot" style="background:#e8a06d"></span>Yiyecek
+    </button>
+    <button class="filter-btn" data-cat="dessert">
+      <span class="dot" style="background:#e86da0"></span>Tatlı
+    </button>
+    <button class="filter-btn" data-cat="drink">
+      <span class="dot" style="background:#6db4e8"></span>İçecek
+    </button>
+  </div>
+
+  <div class="divider"></div>
+
+  <span class="controls-label">Sırala</span>
+  <select class="sort-select" id="sort-select">
+    <option value="rating">En Yüksek Puan</option>
+    <option value="price-asc">En Düşük Fiyat</option>
+    <option value="price-desc">En Yüksek Fiyat</option>
+    <option value="reviews">En Çok Yorum</option>
+    <option value="dist">En Yakın</option>
+  </select>
+
+  <span class="results-count"><strong id="count">0</strong> mekan</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modal-close">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div id="modal-inner"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
