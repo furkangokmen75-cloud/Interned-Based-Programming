@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Paneli - Mekan Ekle</title>
+    <style>
+        body { font-family: 'DM Sans', sans-serif; background: #0d0d0d; color: #f0ede6; padding: 50px; }
+        .admin-box { background: #161616; padding: 30px; border-radius: 14px; max-width: 400px; margin: 0 auto; border: 1px solid rgba(255,255,255,0.07); }
+        input { width: 100%; padding: 10px; margin: 10px 0; background: #1f1f1f; border: 1px solid rgba(255,255,255,0.13); color: white; border-radius: 8px; }
+        button { width: 100%; padding: 10px; background: #e8b86d; color: #1a1208; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        #message { margin-top: 15px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-box">
+    <h2>Yeni Mekan Ekle</h2>
+    <form id="addPlaceForm">
+        <label>Mekan Adı:</label>
+        <input type="text" id="placeName" name="PlaceName" required>
+        
+        <label>Açık Adres / Konum:</label>
+        <input type="text" id="location" name="Location" required>
+        
+        <button type="submit">Sisteme Ekle</button>
+    </form>
+    <div id="message"></div>
+</div>
+
+<script>
+document.getElementById('addPlaceForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('../backend/admin_add_place.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        const msgDiv = document.getElementById('message');
+        msgDiv.textContent = data.message;
+        msgDiv.style.color = data.status === 'success' ? '#6de8a0' : '#e86d6d';
+        if(data.status === 'success') this.reset();
+    })
+    .catch(error => console.error('Hata:', error));
+});
+</script>
+</body>
+</html>
