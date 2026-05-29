@@ -1,22 +1,122 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lezzet Rehberi — Restoranları Keşfet</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lezzet Rehberi — Restoranları Keşfet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="auth-overlay">
+  <div class="modal" id="auth-modal">
+    <button class="modal-close" id="auth-close">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-content" style="padding-top:32px;">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Giriş Yap</button>
+        <button class="auth-tab" data-tab="register">Kayıt Ol</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div class="auth-form" id="form-login">
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:4px;">Tekrar hoş geldin</h2>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:20px;">Favorilerin ve yorumların seni bekliyor.</p>
+        <div class="form-group">
+          <label>E-posta</label>
+          <input type="email" id="login-email" placeholder="ornek@mail.com">
+        </div>
+        <div class="form-group">
+          <label>Şifre</label>
+          <input type="password" id="login-pass" placeholder="••••••••">
+        </div>
+        <div class="form-msg" id="login-msg"></div>
+        <button class="btn-primary" style="width:100%;margin-top:8px;" onclick="doLogin()">Giriş Yap</button>
+      </div>
+
+      <!-- REGISTER -->
+      <div class="auth-form" id="form-register" style="display:none;">
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:4px;">Hesap oluştur</h2>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:20px;">Yorum yap, favorile, keşfet.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="form-group">
+            <label>Ad</label>
+            <input type="text" id="reg-fname" placeholder="Adın">
+          </div>
+          <div class="form-group">
+            <label>Soyad</label>
+            <input type="text" id="reg-lname" placeholder="Soyadın">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>E-posta</label>
+          <input type="email" id="reg-email" placeholder="ornek@mail.com">
+        </div>
+        <div class="form-group">
+          <label>Şifre</label>
+          <input type="password" id="reg-pass" placeholder="En az 6 karakter">
+        </div>
+        <div class="form-msg" id="reg-msg"></div>
+        <button class="btn-primary" style="width:100%;margin-top:8px;" onclick="doRegister()">Kayıt Ol</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW MODAL -->
+<div class="modal-overlay" id="review-overlay">
+  <div class="modal" style="max-width:460px;">
+    <button class="modal-close" onclick="closeReviewModal()">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-content" style="padding-top:32px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:4px;">Yorum Yaz</h2>
+      <p style="font-size:13px;color:var(--text3);margin-bottom:20px;" id="review-item-name"></p>
+      <div class="form-group">
+        <label>Puan</label>
+        <div class="star-picker" id="star-picker">
+          <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Yorumun</label>
+        <textarea id="review-text" rows="3" placeholder="Bu ürün hakkında ne düşünüyorsun?"></textarea>
+      </div>
+      <div class="form-msg" id="review-msg"></div>
+      <button class="btn-primary" style="width:100%;margin-top:8px;" onclick="submitReview()">Gönder</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detail-overlay">
+  <div class="modal" id="detail-modal">
+    <button class="modal-close" id="detail-close">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div id="modal-inner"></div>
+  </div>
+</div>
+
+<!-- HEADER -->
 <header>
+  <div class="header-nav">
+    <div></div>
+    <div id="auth-area">
+      <button class="nav-btn" onclick="openAuth()">Giriş Yap</button>
+      <button class="nav-btn accent" onclick="openAuth('register')">Kayıt Ol</button>
+    </div>
+  </div>
   <p class="brand-eyebrow">🍽 Yemek Rehberi</p>
   <h1>Lezzet <em>Rehberi</em></h1>
   <p class="tagline">Çevrendeki en iyi restoranları, kafeleri ve tatlıcıları keşfet</p>
   <div class="search-wrap">
     <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" id="search-input" placeholder="Restoran veya mutfak türü ara…">
+    <input type="text" id="search-input" placeholder="Restoran veya yemek adı ara…">
     <button class="search-location" id="loc-btn">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
       Konumumu Kullan
@@ -35,19 +135,11 @@
   <span class="controls-label">Kategori</span>
   <div class="filter-group" id="cat-filters">
     <button class="filter-btn active" data-cat="all">Tümü</button>
-    <button class="filter-btn" data-cat="food">
-      <span class="dot" style="background:#e8a06d"></span>Yiyecek
-    </button>
-    <button class="filter-btn" data-cat="dessert">
-      <span class="dot" style="background:#e86da0"></span>Tatlı
-    </button>
-    <button class="filter-btn" data-cat="drink">
-      <span class="dot" style="background:#6db4e8"></span>İçecek
-    </button>
+    <button class="filter-btn" data-cat="food"><span class="dot" style="background:#e8a06d"></span>Yiyecek</button>
+    <button class="filter-btn" data-cat="dessert"><span class="dot" style="background:#e86da0"></span>Tatlı</button>
+    <button class="filter-btn" data-cat="drink"><span class="dot" style="background:#6db4e8"></span>İçecek</button>
   </div>
-
   <div class="divider"></div>
-
   <span class="controls-label">Sırala</span>
   <select class="sort-select" id="sort-select">
     <option value="rating">En Yüksek Puan</option>
@@ -56,21 +148,17 @@
     <option value="reviews">En Çok Yorum</option>
     <option value="dist">En Yakın</option>
   </select>
-
   <span class="results-count"><strong id="count">0</strong> mekan</span>
 </div>
 
-<div class="grid" id="grid"></div>
-
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal" id="modal">
-    <button class="modal-close" id="modal-close">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-    <div id="modal-inner"></div>
+<div class="grid" id="grid">
+  <div class="empty">
+    <div class="empty-icon">⏳</div>
+    <h3>Yükleniyor…</h3>
+    <p>Veriler backend'den çekiliyor.</p>
   </div>
 </div>
 
-<script src="script.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
