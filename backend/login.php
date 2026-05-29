@@ -6,8 +6,13 @@ require_once 'db_connect.php';
 header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = trim($_POST['EmailAddress']);
-    $password = $_POST['Password'];
+    $email = isset($_POST['EmailAddress']) ? trim($_POST['EmailAddress']) : '';
+    $password = isset($_POST['Password']) ? trim($_POST['Password']) : '';
+
+    if (empty($email) || empty($password)) {
+        echo json_encode(['status' => 'error', 'message' => 'Lütfen e-posta ve şifrenizi girin.']);
+        exit;
+    }
 
     try {
         $sql = "SELECT * FROM users WHERE EmailAddress = :email";

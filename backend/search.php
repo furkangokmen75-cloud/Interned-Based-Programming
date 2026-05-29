@@ -18,8 +18,9 @@ try {
     $params = [];
 
     if (!empty($query)) {
-        $sql .= " AND (f.FoodName LIKE :query OR p.PlaceName LIKE :query)";
-        $params[':query'] = "%$query%";
+        $sql .= " AND (f.FoodName LIKE :query1 OR p.PlaceName LIKE :query2)";
+        $params[':query1'] = "%$query%";
+        $params[':query2'] = "%$query%";
     }
 
     if ($cat === 'food') {

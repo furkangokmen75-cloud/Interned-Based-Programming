@@ -45,7 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $avgSql = "SELECT AVG(Rating) as AvgRating FROM reviews WHERE MenuID = :menuid";
         $stmtAvg = $pdo->prepare($avgSql);
         $stmtAvg->execute([':menuid' => $menuId]);
-        $newAvg = round($stmtAvg->fetch()['AvgRating'], 1);
+
+        $avgResult = $stmtAvg->fetch()['AvgRating'];
+        $newAvg = round((float)$avgResult, 1);
 
         $pdo->prepare("UPDATE menu SET Rating = :newrating WHERE MenuID = :menuid")->execute([':newrating' => $newAvg, ':menuid' => $menuId]);
 
@@ -61,7 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $placeAvgSql = "SELECT AVG(Rating) as PlaceAvg FROM menu WHERE PlaceID = :placeid AND Rating > 0";
             $stmtPlaceAvg = $pdo->prepare($placeAvgSql);
             $stmtPlaceAvg->execute([':placeid' => $placeId]);
-            $newPlaceAvg = round($stmtPlaceAvg->fetch()['PlaceAvg'], 1);
+            $placeAvgResult = $stmtPlaceAvg->fetch()['PlaceAvg'];
+            $newPlaceAvg = round((float)$placeAvgResult, 1);
 
             $pdo->prepare("UPDATE places SET Rating = :newrating WHERE PlaceID = :placeid")->execute([':newrating' => $newPlaceAvg, ':placeid' => $placeId]);
         }
