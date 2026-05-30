@@ -21,23 +21,45 @@
         <button class="auth-tab active" data-tab="login">Giriş Yap</button>
         <button class="auth-tab" data-tab="register">Kayıt Ol</button>
       </div>
+
+      <!-- LOGIN -->
       <div class="auth-form" id="form-login">
         <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:4px;">Tekrar hoş geldin</h2>
         <p style="font-size:13px;color:var(--text3);margin-bottom:20px;">Favorilerin ve yorumların seni bekliyor.</p>
-        <div class="form-group"><label>E-posta</label><input type="email" id="login-email" placeholder="ornek@mail.com"></div>
-        <div class="form-group"><label>Şifre</label><input type="password" id="login-pass" placeholder="••••••••"></div>
+        <div class="form-group">
+          <label>E-posta</label>
+          <input type="email" id="login-email" placeholder="ornek@mail.com">
+        </div>
+        <div class="form-group">
+          <label>Şifre</label>
+          <input type="password" id="login-pass" placeholder="••••••••">
+        </div>
         <div class="form-msg" id="login-msg"></div>
         <button class="btn-primary" style="width:100%;margin-top:8px;" onclick="doLogin()">Giriş Yap</button>
       </div>
+
+      <!-- REGISTER -->
       <div class="auth-form" id="form-register" style="display:none;">
         <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:4px;">Hesap oluştur</h2>
         <p style="font-size:13px;color:var(--text3);margin-bottom:20px;">Yorum yap, favorile, keşfet.</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div class="form-group"><label>Ad</label><input type="text" id="reg-fname" placeholder="Adın"></div>
-          <div class="form-group"><label>Soyad</label><input type="text" id="reg-lname" placeholder="Soyadın"></div>
+          <div class="form-group">
+            <label>Ad</label>
+            <input type="text" id="reg-fname" placeholder="Adın">
+          </div>
+          <div class="form-group">
+            <label>Soyad</label>
+            <input type="text" id="reg-lname" placeholder="Soyadın">
+          </div>
         </div>
-        <div class="form-group"><label>E-posta</label><input type="email" id="reg-email" placeholder="ornek@mail.com"></div>
-        <div class="form-group"><label>Şifre</label><input type="password" id="reg-pass" placeholder="En az 6 karakter"></div>
+        <div class="form-group">
+          <label>E-posta</label>
+          <input type="email" id="reg-email" placeholder="ornek@mail.com">
+        </div>
+        <div class="form-group">
+          <label>Şifre</label>
+          <input type="password" id="reg-pass" placeholder="En az 6 karakter">
+        </div>
         <div class="form-msg" id="reg-msg"></div>
         <button class="btn-primary" style="width:100%;margin-top:8px;" onclick="doRegister()">Kayıt Ol</button>
       </div>
@@ -60,12 +82,16 @@
           <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
         </div>
       </div>
-      <div class="form-group"><label>Yorumun</label><textarea id="review-text" rows="3" placeholder="Bu ürün hakkında ne düşünüyorsun?"></textarea></div>
+      <div class="form-group">
+        <label>Yorumun</label>
+        <textarea id="review-text" rows="3" placeholder="Bu ürün hakkında ne düşünüyorsun?"></textarea>
+      </div>
       <div class="form-msg" id="review-msg"></div>
       <button class="btn-primary" style="width:100%;margin-top:8px;" onclick="submitReview()">Gönder</button>
     </div>
   </div>
 </div>
+
 
 <!-- DETAIL MODAL -->
 <div class="modal-overlay" id="detail-overlay">
@@ -77,18 +103,19 @@
   </div>
 </div>
 
-<!-- ═══ HEADER ═══ -->
+<!-- HEADER -->
 <header>
   <div class="header-nav">
-    <nav class="top-nav">
-      <a href="#explore" class="top-nav-link active">Keşfet</a>
-      <a href="#about" class="top-nav-link" onclick="scrollToAbout(event)">Hakkında</a>
-    </nav>
-    <div id="auth-area">
+    <div id="fav-nav-area">
+  <button class="nav-btn fav-nav-btn fav-hidden" id="fav-nav-btn" onclick="toggleFavSection()">
+    💛 Favorilerim <span class="fav-nav-count" id="fav-nav-count"></span>
+  </button>
+</div>
+    <div id="auth-area" style="display:flex;gap:8px;align-items:center;">
       <button class="nav-btn" onclick="openAuth()">Giriş Yap</button>
       <button class="nav-btn accent" onclick="openAuth('register')">Kayıt Ol</button>
     </div>
-  </div>
+</div>
   <p class="brand-eyebrow">🍽 Yemek Rehberi</p>
   <h1>Lezzet <em>Rehberi</em></h1>
   <p class="tagline">Çevrendeki en iyi restoranları, kafeleri ve tatlıcıları keşfet</p>
@@ -102,191 +129,91 @@
   </div>
 </header>
 
-<!-- ═══ EXPLORE SECTION ═══ -->
-<section id="explore">
-
-  <div class="location-banner" id="loc-banner">
-    <div class="location-pill">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-      <span id="loc-text">Konum alınıyor…</span>
-    </div>
+<div class="location-banner" id="loc-banner">
+  <div class="location-pill">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+    <span id="loc-text">Konum alınıyor…</span>
   </div>
+</div>
 
-  <div class="controls">
-    <span class="controls-label">Kategori</span>
-    <div class="filter-group" id="cat-filters">
-      <button class="filter-btn active" data-cat="all">Tümü</button>
-      <button class="filter-btn" data-cat="food"><span class="dot" style="background:#e8a06d"></span>Yiyecek</button>
-      <button class="filter-btn" data-cat="dessert"><span class="dot" style="background:#e86da0"></span>Tatlı</button>
-      <button class="filter-btn" data-cat="drink"><span class="dot" style="background:#6db4e8"></span>İçecek</button>
-    </div>
-    <div class="divider"></div>
-    <span class="controls-label">Sırala</span>
-    <select class="sort-select" id="sort-select">
-      <option value="rating">En Yüksek Puan</option>
-      <option value="price-asc">En Düşük Fiyat</option>
-      <option value="price-desc">En Yüksek Fiyat</option>
-      <option value="reviews">En Çok Yorum</option>
-      <option value="dist">En Yakın</option>
-    </select>
-    <span class="results-count"><strong id="count">0</strong> mekan</span>
+<div class="controls">
+  <span class="controls-label">Kategori</span>
+  <div class="filter-group" id="cat-filters">
+    <button class="filter-btn active" data-cat="all">Tümü</button>
+    <button class="filter-btn" data-cat="food"><span class="dot" style="background:#e8a06d"></span>Yiyecek</button>
+    <button class="filter-btn" data-cat="dessert"><span class="dot" style="background:#e86da0"></span>Tatlı</button>
+    <button class="filter-btn" data-cat="drink"><span class="dot" style="background:#6db4e8"></span>İçecek</button>
   </div>
+  <div class="divider"></div>
+  <span class="controls-label">Sırala</span>
+  <select class="sort-select" id="sort-select">
+    <option value="rating">En Yüksek Puan</option>
+    <option value="price-asc">En Düşük Fiyat</option>
+    <option value="price-desc">En Yüksek Fiyat</option>
+    <option value="reviews">En Çok Yorum</option>
+    <option value="dist">En Yakın</option>
+  </select>
+  
+  <span class="results-count"><strong id="count">0</strong> mekan</span>
+</div>
 
-  <div class="grid" id="grid">
-    <div class="empty">
-      <div class="empty-icon">⏳</div>
-      <h3>Yükleniyor…</h3>
-      <p>Veriler backend'den çekiliyor.</p>
-    </div>
+<div class="fav-section fav-hidden" id="fav-section">
+  <div class="fav-section-header">
+    <span class="fav-section-title">💛 Favorilerim</span>
+    <span class="fav-section-count" id="fav-section-count"></span>
+    <button class="fav-section-close" onclick="closeFavSection()">✕</button>
   </div>
-
-</section>
-
-<!-- ═══ ABOUT SECTION ═══ -->
-<section id="about" class="about-section">
-
-  <!-- HERO -->
-  <div class="about-hero">
-    <div class="about-hero-glow"></div>
-    <span class="about-eyebrow">🍽 Proje Hakkında</span>
-    <h2 class="about-h2">Lezzetin <em>Peşinde</em><br>Bir Rehber</h2>
-    <p class="about-lead">Çevrendeki en iyi restoranları, kafeleri ve tatlıcıları keşfetmeni sağlayan, kullanıcı yorumlarıyla büyüyen ve gerçek verilerle çalışan bir yemek rehberi.</p>
-    <div class="about-stats">
-      <div class="about-stat"><span class="about-stat-num">500+</span><span class="about-stat-label">Mekan</span></div>
-      <div class="about-stat"><span class="about-stat-num">3</span><span class="about-stat-label">Kategori</span></div>
-      <div class="about-stat"><span class="about-stat-num">5★</span><span class="about-stat-label">Puan</span></div>
-      <div class="about-stat"><span class="about-stat-num">∞</span><span class="about-stat-label">Yorum</span></div>
-    </div>
+  <div class="grid fav-grid-inner" id="fav-grid"></div>
+  <div class="fav-section-empty fav-hidden" id="fav-empty">
+    <div class="empty-icon">💛</div>
+    <h3>Henüz favori yok</h3>
+    <p>Kartlardaki kalp ikonuna tıklayarak favorine ekleyebilirsin.</p>
   </div>
-
-  <div class="about-divider"></div>
-
-  <!-- MISSION -->
-  <div class="about-mission">
-    <div class="about-mission-text">
-      <span class="about-overline">Misyon</span>
-      <h3>Doğru lezzeti bulmak artık çok daha kolay</h3>
-      <p>Lezzet Rehberi, yemek tercihlerini yaparken doğru bilgiye ulaşmanı sağlamak için tasarlandı. Yiyecek, tatlı veya içecek — ne aradığını biliriz.</p>
-      <p>Gerçek kullanıcıların gerçek yorumlarıyla oluşan puanlar, sana güvenilir ve güncel bir rehber sunar. Favorilerin, yorumların ve keşifler tamamen senin elinde.</p>
-    </div>
-    <div class="about-mission-cards">
-      <div class="m-card" style="animation-delay:0s">
-        <div class="m-card-emoji">🥩</div>
-        <div class="m-card-name">Boğaz Ocakbaşı</div>
-        <div class="m-card-sub">Türk Izgara · 0.4 km</div>
-        <div class="m-card-stars">★★★★★</div>
-        <span class="m-card-badge food">🍽 Yiyecek</span>
-      </div>
-      <div class="m-card" style="animation-delay:-2s">
-        <div class="m-card-emoji">🍰</div>
-        <div class="m-card-name">Tatlım Patisserie</div>
-        <div class="m-card-sub">Pastane · 1.1 km</div>
-        <div class="m-card-stars">★★★★★</div>
-        <span class="m-card-badge dessert">🍰 Tatlı</span>
-      </div>
-      <div class="m-card" style="animation-delay:-4s">
-        <div class="m-card-emoji">☕</div>
-        <div class="m-card-name">Kahve Dedektifi</div>
-        <div class="m-card-sub">Specialty Kahve · 0.9 km</div>
-        <div class="m-card-stars">★★★★★</div>
-        <span class="m-card-badge drink">☕ İçecek</span>
-      </div>
-    </div>
+</div>
+<div class="grid" id="grid">
+  <div class="empty">
+    <div class="empty-icon">⏳</div>
+    <h3>Yükleniyor…</h3>
+    <p>Veriler backend'den çekiliyor.</p>
   </div>
-
-  <div class="about-divider"></div>
-
-  <!-- FEATURES -->
-  <div class="about-features">
-    <div class="about-section-header">
-      <span class="about-overline">Özellikler</span>
-      <h3>Her şey tek bir yerde</h3>
-    </div>
-    <div class="about-features-grid">
-      <div class="about-feat c-amber"><div class="about-feat-icon">🔍</div><div class="about-feat-title">Akıllı Arama</div><div class="about-feat-desc">Restoran adı veya yemek türüyle anlık arama. Yazarken sonuçlar güncellenir.</div></div>
-      <div class="about-feat c-teal"><div class="about-feat-icon">📍</div><div class="about-feat-title">Konum Bazlı</div><div class="about-feat-desc">GPS ile en yakın mekanları öne çıkar, mesafeye göre sırala.</div></div>
-      <div class="about-feat c-green"><div class="about-feat-icon">⭐</div><div class="about-feat-title">Gerçek Puanlar</div><div class="about-feat-desc">Kullanıcı yorumlarından otomatik hesaplanan ortalama. Spam korumalı.</div></div>
-      <div class="about-feat c-pink"><div class="about-feat-icon">❤️</div><div class="about-feat-title">Favoriler</div><div class="about-feat-desc">Beğendiğin mekanları kaydet, istediğin zaman geri dön.</div></div>
-      <div class="about-feat c-blue"><div class="about-feat-icon">💬</div><div class="about-feat-title">Yorum Sistemi</div><div class="about-feat-desc">Puan ver, yorum yaz. Her yorum restoran puanını günceller.</div></div>
-      <div class="about-feat c-purple"><div class="about-feat-icon">🛡️</div><div class="about-feat-title">Admin Paneli</div><div class="about-feat-desc">Yöneticiler mekan ve menüyü yönetebilir. Tam yetki kontrolü.</div></div>
-    </div>
-  </div>
-
-  <div class="about-divider"></div>
-
-  <!-- HOW IT WORKS -->
-  <div class="about-how">
-    <div class="about-section-header">
-      <span class="about-overline">Nasıl Çalışır</span>
-      <h3>Üç adımda lezzetini bul</h3>
-    </div>
-    <div class="about-steps">
-      <div class="about-step">
-        <div class="about-step-num">1</div>
-        <div class="about-step-body">
-          <h4>Ara veya Keşfet</h4>
-          <p>Yemek ya da mekan adı yaz, kategori filtrele, puanlı veya ucuz olanları öne çıkar.</p>
-          <span class="about-step-tag">search.php + recommendations.php</span>
-        </div>
-      </div>
-      <div class="about-step">
-        <div class="about-step-num">2</div>
-        <div class="about-step-body">
-          <h4>Hesap Oluştur & Giriş Yap</h4>
-          <p>Yorum yazmak ve favorilere eklemek için ücretsiz kayıt ol. Şifreler güvenli hash ile saklanır.</p>
-          <span class="about-step-tag">register.php + login.php</span>
-        </div>
-      </div>
-      <div class="about-step">
-        <div class="about-step-num">3</div>
-        <div class="about-step-body">
-          <h4>Favorile & Yorum Yaz</h4>
-          <p>Karta tıkla, detayları gör. Favorilere ekle veya puan vererek yorum yaz. Puanlar otomatik güncellenir.</p>
-          <span class="about-step-tag">toggle_favorite.php + add_review.php</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="about-divider"></div>
-
-  <!-- TECH STACK -->
-  <div class="about-tech">
-    <div class="about-section-header">
-      <span class="about-overline">Teknoloji</span>
-      <h3>Kullanılan araçlar</h3>
-    </div>
-    <div class="about-tech-grid">
-      <span class="about-tech-pill"><span class="dot" style="background:#e8a06d"></span>HTML5</span>
-      <span class="about-tech-pill"><span class="dot" style="background:#6db4e8"></span>CSS3</span>
-      <span class="about-tech-pill"><span class="dot" style="background:#e8e06d"></span>Vanilla JavaScript</span>
-      <span class="about-tech-pill"><span class="dot" style="background:#7b7de8"></span>PHP 8</span>
-      <span class="about-tech-pill"><span class="dot" style="background:#6de8c4"></span>MySQL / PDO</span>
-      <span class="about-tech-pill"><span class="dot" style="background:#e86da0"></span>Session Auth</span>
-      <span class="about-tech-pill"><span class="dot" style="background:#a0e86d"></span>Password Hash</span>
-      <span class="about-tech-pill"><span class="dot" style="background:#6dd4e8"></span>Fetch API</span>
-      <span class="about-tech-pill"><span class="dot" style="background:#e8b86d"></span>Google Fonts</span>
-      <span class="about-tech-pill"><span class="dot" style="background:#6de8a0"></span>XAMPP / Apache</span>
-    </div>
-  </div>
-
-  <!-- CTA -->
-  <div class="about-cta">
-    <div class="about-cta-glow"></div>
-    <h3>Keşfetmeye <em>hazır</em> mısın?</h3>
-    <p>Yukarı çık, filtrele, yorumla, favorile.</p>
-    <button class="btn-primary" onclick="scrollToTop()">🍽 Mekanları Keşfet</button>
-  </div>
-
-</section>
+</div>
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <p>© 2025 Lezzet Rehberi — Internet Tabanlı Programlama Projesi &nbsp;·&nbsp;
-    <a href="#about" onclick="scrollToAbout(event)">Hakkında</a>
-  </p>
-</footer>
+  <div class="footer-inner">
 
-<script src="app.js"></script>
+    <div class="footer-brand">
+      <p class="brand-eyebrow" style="margin-bottom:10px;">🍽 Yemek Rehberi</p>
+      <h2 class="footer-logo">Lezzet <em>Rehberi</em></h2>
+      <p class="footer-tagline">Çevrendeki en iyi lezzetleri keşfetmek hiç bu kadar kolay olmamıştı.</p>
+    </div>
+
+    <div class="footer-sections">
+
+      <div class="footer-block">
+        <h4>Hikayemiz</h4>
+        <p>Lezzet Rehberi, 2025 yılında bir grup üniversite öğrencisinin "neden iyi bir restoran bulmak bu kadar zor?" sorusunu sormasıyla doğdu. Bir dönem projesi olarak başlayan bu fikir, gerçek bir tutkuya dönüştü.</p>
+      </div>
+
+      <div class="footer-block">
+        <h4>Misyonumuz</h4>
+        <p>Yemek seçmek stres değil, keyif olmalı. Kullanıcıların gerçek yorumlarına dayanan, şeffaf ve hızlı bir rehber sunarak herkesin kendi mahallesindeki en iyi lokmayı bulmasına yardımcı olmak istiyoruz.</p>
+      </div>
+
+      <div class="footer-block">
+        <h4>Vizyonumuz</h4>
+        <p>Türkiye'nin dört bir yanındaki lezzetleri tek çatı altında toplamak; sadece büyük şehirleri değil, küçük kasabaların gizli cevherlerini de keşfedilebilir kılmak. Çünkü her güzel yemeğin bir hikayesi var.</p>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 Lezzet Rehberi — Üniversite Bitirme Projesi</span>
+      <span class="footer-heart">Yapıldı <span style="color:var(--red)">♥</span> ile</span>
+    </div>
+
+  </div>
+</footer>
+<script src="script.js"></script>
 </body>
 </html>
