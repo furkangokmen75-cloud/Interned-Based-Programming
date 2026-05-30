@@ -7,7 +7,7 @@ $cat = isset($_GET['cat']) ? trim($_GET['cat']) : 'all';
 
 try {
     // COUNT(r.ReviewID) and LEFT JOIN reviews were added
-    $sql = "SELECT m.MenuID, f.FoodName, f.Description, c.CategoryName, c.CategoryID, p.PlaceID, p.PlaceName, m.Price, m.Rating, m.StockStatus, COUNT(r.ReviewID) as ReviewCount
+    $sql = "SELECT m.MenuID, f.FoodName, f.ImagePath, f.Description, c.CategoryName, c.CategoryID, p.PlaceID, p.PlaceName, m.Price, m.Rating, m.StockStatus, COUNT(r.ReviewID) as ReviewCount
             FROM menu m
             JOIN foods f ON m.FoodID = f.FoodID
             JOIN places p ON m.PlaceID = p.PlaceID
@@ -73,7 +73,7 @@ try {
             'tags' => [$row['CategoryName'], "Restoran"],
             'desc' => $row['Description'],
             'hours' => ["Her gün", "09:00–22:00", "", ""], 
-            'img' => null 
+            'img' => $row['ImagePath'] 
         ];
     }, $results);
 

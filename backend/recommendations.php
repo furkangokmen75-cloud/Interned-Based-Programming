@@ -4,7 +4,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 try {
     // COUNT(r.ReviewID), LEFT JOIN, and GROUP BY were added
-    $sql = "SELECT m.MenuID, f.FoodName, f.Description, c.CategoryName, c.CategoryID, p.PlaceID, p.PlaceName, m.Price, m.Rating, m.StockStatus, COUNT(r.ReviewID) as ReviewCount
+    $sql = "SELECT m.MenuID, f.FoodName, f.ImagePath, f.Description, c.CategoryName, c.CategoryID, p.PlaceID, p.PlaceName, m.Price, m.Rating, m.StockStatus, COUNT(r.ReviewID) as ReviewCount
             FROM menu m
             JOIN foods f ON m.FoodID = f.FoodID
             JOIN places p ON m.PlaceID = p.PlaceID
@@ -51,7 +51,7 @@ try {
             'tags' => ["Popüler", $row['CategoryName']],
             'desc' => $row['Description'],
             'hours' => ["Her gün", "09:00–23:00", "", ""], 
-            'img' => null 
+            'img' => $row['ImagePath']
         ];
     }, $results);
 
