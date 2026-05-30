@@ -1,7 +1,7 @@
 // ── CONFIG ────────────────────────────────────────────────────────────────────
 // Backend PHP dosyalarınızın bulunduğu klasörün yolunu buraya yazın.
 // Örn: '/api/' veya 'http://localhost/foodsearch/'
-const BASE = './';
+const BASE = '../backend/';
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let allData     = [];
