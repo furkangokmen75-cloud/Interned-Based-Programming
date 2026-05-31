@@ -120,6 +120,7 @@ async function loadRecommendations() {
     const data = await res.json();
     if (data.status === 'success') {
       allData = data.data;
+      document.getElementById('section-heading').style.display = '';
       applyClientFilter();
     } else {
       showEmpty('Veriler yüklenemedi.', data.message || '');
@@ -141,6 +142,7 @@ async function fetchSearch() {
     const data = await res.json();
     if (data.status === 'success') {
       allData = data.data;
+      document.getElementById('section-heading').style.display = 'none';
       applyClientFilter();
     }
   } catch (_) {}

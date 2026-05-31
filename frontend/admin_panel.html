@@ -2,50 +2,318 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Paneli - Mekan Ekle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli - Lezzet Rehberi</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'DM Sans', sans-serif; background: #0d0d0d; color: #f0ede6; padding: 50px; }
-        .admin-box { background: #161616; padding: 30px; border-radius: 14px; max-width: 400px; margin: 0 auto; border: 1px solid rgba(255,255,255,0.07); }
-        input { width: 100%; padding: 10px; margin: 10px 0; background: #1f1f1f; border: 1px solid rgba(255,255,255,0.13); color: white; border-radius: 8px; }
-        button { width: 100%; padding: 10px; background: #e8b86d; color: #1a1208; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        #message { margin-top: 15px; font-size: 14px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0d0d0d;
+            color: #f0ede6;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #e8b86d;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 8px 18px;
+            background: #1f1f1f;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover { border-color: #e8b86d; color: #e8b86d; }
+        .tab-btn.active { background: #e8b86d; color: #1a1208; border-color: #e8b86d; font-weight: 600; }
+
+        .panel {
+            display: none;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .panel.active { display: block; }
+
+        .admin-box {
+            background: #161616;
+            padding: 30px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .admin-box h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #e8b86d;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 5px;
+            margin-top: 14px;
+        }
+
+        label:first-of-type { margin-top: 0; }
+
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            background: #1f1f1f;
+            border: 1px solid rgba(255,255,255,0.13);
+            color: white;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #e8b86d;
+        }
+
+        select option { background: #1f1f1f; }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 11px;
+            background: #e8b86d;
+            color: #1a1208;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            margin-top: 20px;
+            transition: opacity 0.2s;
+        }
+
+        button[type="submit"]:hover { opacity: 0.85; }
+
+        .msg {
+            margin-top: 14px;
+            font-size: 13px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .msg.ok  { background: rgba(110,232,160,0.1); color: #6de8a0; display: block; }
+        .msg.err { background: rgba(232,110,110,0.1); color: #e86d6d; display: block; }
+
+        .danger { background: #e86d6d; color: white; }
+        .danger:hover { opacity: 0.85; }
     </style>
 </head>
 <body>
 
-<div class="admin-box">
-    <h2>Yeni Mekan Ekle</h2>
-    <form id="addPlaceForm">
-        <label>Mekan Adı:</label>
-        <input type="text" id="placeName" name="PlaceName" required>
-        
-        <label>Açık Adres / Konum:</label>
-        <input type="text" id="location" name="Location" required>
-        
-        <button type="submit">Sisteme Ekle</button>
-    </form>
-    <div id="message"></div>
+<header>
+    <h1>🍽 Admin Paneli</h1>
+    <p>Lezzet Rehberi Yönetim Sistemi</p>
+</header>
+
+<!-- TABS -->
+<div class="tabs">
+    <button class="tab-btn active" onclick="showTab('add-place')">➕ Mekan Ekle</button>
+    <button class="tab-btn" onclick="showTab('delete-place')">🗑 Mekan Sil</button>
+    <button class="tab-btn" onclick="showTab('update-place')">✏️ Mekan Güncelle</button>
+    <button class="tab-btn" onclick="showTab('add-menu')">➕ Menüye Ürün Ekle</button>
+    <button class="tab-btn" onclick="showTab('delete-menu')">🗑 Menüden Sil</button>
+    <button class="tab-btn" onclick="showTab('update-menu')">✏️ Menü Güncelle</button>
+</div>
+
+<!-- 1. MEKAN EKLE -->
+<div class="panel active" id="panel-add-place">
+    <div class="admin-box">
+        <h2>➕ Yeni Mekan Ekle</h2>
+        <form id="form-add-place">
+            <label>Mekan Adı</label>
+            <input type="text" name="PlaceName" placeholder="örn. Köfteci Aykut" required>
+
+            <label>Adres / Konum</label>
+            <input type="text" name="Location" placeholder="örn. Atatürk Cad. No:5, Bandırma" required>
+
+            <button type="submit">Sisteme Ekle</button>
+        </form>
+        <div class="msg" id="msg-add-place"></div>
+    </div>
+</div>
+
+<!-- 2. MEKAN SİL -->
+<div class="panel" id="panel-delete-place">
+    <div class="admin-box">
+        <h2>🗑 Mekan Sil</h2>
+        <form id="form-delete-place">
+            <label>Mekan ID</label>
+            <input type="number" name="PlaceID" placeholder="örn. 5" required>
+
+            <button type="submit" class="danger">Mekanı Sil</button>
+        </form>
+        <div class="msg" id="msg-delete-place"></div>
+    </div>
+</div>
+
+<!-- 3. MEKAN GÜNCELLE -->
+<div class="panel" id="panel-update-place">
+    <div class="admin-box">
+        <h2>✏️ Mekan Güncelle</h2>
+        <form id="form-update-place">
+            <label>Mekan ID</label>
+            <input type="number" name="PlaceID" placeholder="örn. 5" required>
+
+            <label>Yeni Mekan Adı</label>
+            <input type="text" name="PlaceName" placeholder="örn. Köfteci Aykut" required>
+
+            <label>Yeni Adres / Konum</label>
+            <input type="text" name="Location" placeholder="örn. Atatürk Cad. No:5, Bandırma" required>
+
+            <button type="submit">Güncelle</button>
+        </form>
+        <div class="msg" id="msg-update-place"></div>
+    </div>
+</div>
+
+<!-- 4. MENÜYE ÜRÜN EKLE -->
+<div class="panel" id="panel-add-menu">
+    <div class="admin-box">
+        <h2>➕ Menüye Ürün Ekle</h2>
+        <form id="form-add-menu">
+            <label>Mekan ID</label>
+            <input type="number" name="PlaceID" placeholder="örn. 1" required>
+
+            <label>Yemek ID</label>
+            <input type="number" name="FoodID" placeholder="örn. 3" required>
+
+            <label>Fiyat (₺)</label>
+            <input type="number" step="0.01" name="Price" placeholder="örn. 85.00" required>
+
+            <button type="submit">Menüye Ekle</button>
+        </form>
+        <div class="msg" id="msg-add-menu"></div>
+    </div>
+</div>
+
+<!-- 5. MENÜDEN SİL -->
+<div class="panel" id="panel-delete-menu">
+    <div class="admin-box">
+        <h2>🗑 Menüden Ürün Sil</h2>
+        <form id="form-delete-menu">
+            <label>Menü ID</label>
+            <input type="number" name="MenuID" placeholder="örn. 12" required>
+
+            <button type="submit" class="danger">Ürünü Sil</button>
+        </form>
+        <div class="msg" id="msg-delete-menu"></div>
+    </div>
+</div>
+
+<!-- 6. MENÜ GÜNCELLE -->
+<div class="panel" id="panel-update-menu">
+    <div class="admin-box">
+        <h2>✏️ Menü Ürünü Güncelle</h2>
+        <form id="form-update-menu">
+            <label>Menü ID</label>
+            <input type="number" name="MenuID" placeholder="örn. 12" required>
+
+            <label>Yeni Fiyat (₺)</label>
+            <input type="number" step="0.01" name="Price" placeholder="örn. 95.00" required>
+
+            <label>Stok Durumu</label>
+            <select name="StockStatus">
+                <option value="1">✅ Mevcut</option>
+                <option value="0">❌ Tükendi</option>
+            </select>
+
+            <button type="submit">Güncelle</button>
+        </form>
+        <div class="msg" id="msg-update-menu"></div>
+    </div>
 </div>
 
 <script>
-document.getElementById('addPlaceForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    
-    fetch('../backend/admin_add_place.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        const msgDiv = document.getElementById('message');
-        msgDiv.textContent = data.message;
-        msgDiv.style.color = data.status === 'success' ? '#6de8a0' : '#e86d6d';
-        if(data.status === 'success') this.reset();
-    })
-    .catch(error => console.error('Hata:', error));
-});
+function showTab(name) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    event.target.classList.add('active');
+}
+
+function showMsg(id, text, ok) {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = 'msg ' + (ok ? 'ok' : 'err');
+}
+
+async function submitForm(formId, phpFile, msgId) {
+    const form = document.getElementById(formId);
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const fd = new FormData(this);
+        
+        try {
+            const res = await fetch(phpFile, { method: 'POST', body: fd });
+            
+           
+            if (!res.ok) {
+                throw new Error(`HTTP Hatası: ${res.status}`);
+            }
+
+            const responseText = await res.text();
+            
+            const data = JSON.parse(responseText);
+            
+            showMsg(msgId, data.message, data.status === 'success');
+            if (data.status === 'success') this.reset();
+            
+        } catch (error) {
+            
+            console.error(`[${formId}] Formu gönderilirken hata oluştu:`, error);
+            showMsg(msgId, 'Bağlantı hatası. Ayrıntılar için konsola (F12) bakın.', false);
+        }
+    });
+}
+
+submitForm('form-add-place',    '../backend/admin_add_place.php',    'msg-add-place');
+submitForm('form-delete-place', '../backend/admin_delete_place.php', 'msg-delete-place');
+submitForm('form-update-place', '../backend/admin_update_place.php', 'msg-update-place');
+submitForm('form-add-menu',     '../backend/admin_add_menu.php',     'msg-add-menu');
+submitForm('form-delete-menu',  '../backend/admin_delete_menu.php',  'msg-delete-menu');
+submitForm('form-update-menu',  '../backend/admin_update_menu.php',  'msg-update-menu');
 </script>
+
 </body>
 </html>

@@ -477,3 +477,17 @@ h1 em { font-style: italic; color: var(--accent); }
 @media (max-width: 600px) {
   .fav-section { padding-left: 1.25rem; padding-right: 1.25rem; }
 }
+.section-heading {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 2rem 1rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--text2);
+  font-weight: 400;
+  text-align: center;
+}
+.section-heading span {
+  border-left: none;   /* border-left'i kaldır */
+  padding-left: 0;     /* padding-left'i kaldır */
+}
