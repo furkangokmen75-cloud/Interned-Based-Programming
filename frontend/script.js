@@ -5,6 +5,7 @@ const BASE = '../backend/';
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let allData     = [];
+let favData = [];
 let currentData = [];
 let currentUser = null;
 let favSet      = new Set();
@@ -153,7 +154,7 @@ async function loadFavorites() {
     const res  = await fetch(BASE + 'get_favorites.php');
     const data = await res.json();
     if (data.status === 'success') {
-      favSet = new Set(data.data.map(f => f.MenuID));
+      favSet = new Set(data.data.map(f => f.id)); 
       updateFavNavBadge();
       renderGrid();
     }
@@ -198,7 +199,7 @@ function renderCard(r, i) {
   return `
   <div class="card" style="animation-delay:${i * 0.04}s" onclick="openDetail(${r.id})">
     <div class="card-img">
-      ${r.img ? `<img src="${r.img}" alt="${r.name}" loading="lazy">` : `<div class="card-img-placeholder">${r.emoji}</div>`}
+      ${r.img ? `<img src="${r.img}" alt="${r.name}" loading="lazy" onerror="this.onerror=null; this.outerHTML='<div class=\\'card-img-placeholder\\'>${r.emoji}</div>';">` : `<div class="card-img-placeholder">${r.emoji}</div>`}
       <span class="card-badge ${r.cat}">${badgeLabel(r.cat)}</span>
       <div class="card-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${r.id})">
         <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -236,13 +237,13 @@ function showEmpty(title, msg) {
 
 // ── DETAIL MODAL ──────────────────────────────────────────────────────────────
 async function openDetail(id) {
-  const r = currentData.find(d => d.id === id) || allData.find(d => d.id === id);
+  const r = currentData.find(d => d.id === id) || allData.find(d => d.id === id) || favData.find(d => d.id === id);
   if (!r) return;
 
   const isFav = favSet.has(id);
 
   document.getElementById('modal-inner').innerHTML = `
-    ${r.img ? `<img class="modal-img" src="${r.img}" alt="${r.name}">` : `<div class="modal-img-ph">${r.emoji}</div>`}
+    ${r.img ? `<img class="modal-img" src="${r.img}" alt="${r.name}" onerror="this.onerror=null; this.outerHTML='<div class=\\'modal-img-ph\\'>${r.emoji}</div>';">` : `<div class="modal-img-ph">${r.emoji}</div>`}
     <div class="modal-content">
       <div class="modal-header">
         <h2>${r.name}</h2>
@@ -523,7 +524,8 @@ function starSvg(type) {
     return `<svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
   if (type === 'half')
     return `<svg class="star half" viewBox="0 0 24 24"><defs><linearGradient id="hg"><stop offset="50%" stop-color="var(--accent)"/><stop offset="50%" stop-color="transparent"/></linearGradient></defs><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="url(#hg)" stroke="var(--accent)"/></svg>`;
-  return `<svg class="star empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+  // CSS HATASINI ÇÖZEN KISIM (star-empty yaptık):
+  return `<svg class="star star-empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
 }
 
 // ── FAV SECTION ───────────────────────────────────────────────────────────────
@@ -557,18 +559,12 @@ async function renderFavSection() {
     const data = await res.json();
 
     if (data.status === 'success' && data.data.length) {
-      favSet = new Set(data.data.map(f => f.MenuID));
-      const favItems = data.data.map(f =>
-        allData.find(d => d.id === f.MenuID) || {
-          id: f.MenuID,
-          name: f.PlaceName + ' — ' + f.FoodName,
-          cat: 'food', cuisine: '', rating: parseFloat(f.Rating) || 0,
-          reviews: 0, price: 1, priceLabel: '₺', open: true,
-          emoji: '🍽️', tags: [], desc: '', hours: [], img: null
-        }
-      );
-      grid.innerHTML   = favItems.map((r, i) => renderCard(r, i)).join('');
-      count.textContent = favItems.length + ' ürün';
+      favSet = new Set(data.data.map(f => f.id));
+      
+      favData = data.data; 
+      
+      grid.innerHTML    = favData.map((r, i) => renderCard(r, i)).join('');
+      count.textContent = favData.length + ' ürün';
       grid.classList.remove('fav-hidden');
       empty.classList.add('fav-hidden');
     } else {
