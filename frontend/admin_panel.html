@@ -283,23 +283,36 @@ async function submitForm(formId, phpFile, msgId) {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         const fd = new FormData(this);
+        
         try {
             const res = await fetch(phpFile, { method: 'POST', body: fd });
-            const data = await res.json();
+            
+           
+            if (!res.ok) {
+                throw new Error(`HTTP Hatası: ${res.status}`);
+            }
+
+            const responseText = await res.text();
+            
+            const data = JSON.parse(responseText);
+            
             showMsg(msgId, data.message, data.status === 'success');
             if (data.status === 'success') this.reset();
-        } catch {
-            showMsg(msgId, 'Bağlantı hatası.', false);
+            
+        } catch (error) {
+            
+            console.error(`[${formId}] Formu gönderilirken hata oluştu:`, error);
+            showMsg(msgId, 'Bağlantı hatası. Ayrıntılar için konsola (F12) bakın.', false);
         }
     });
 }
 
-submitForm('form-add-place',    'backend/admin_add_place.php',    'msg-add-place');
-submitForm('form-delete-place', 'backend/admin_delete_place.php', 'msg-delete-place');
-submitForm('form-update-place', 'backend/admin_update_place.php', 'msg-update-place');
-submitForm('form-add-menu',     'backend/admin_add_menu.php',     'msg-add-menu');
-submitForm('form-delete-menu',  'backend/admin_delete_menu.php',  'msg-delete-menu');
-submitForm('form-update-menu',  'backend/admin_update_menu.php',  'msg-update-menu');
+submitForm('form-add-place',    '../backend/admin_add_place.php',    'msg-add-place');
+submitForm('form-delete-place', '../backend/admin_delete_place.php', 'msg-delete-place');
+submitForm('form-update-place', '../backend/admin_update_place.php', 'msg-update-place');
+submitForm('form-add-menu',     '../backend/admin_add_menu.php',     'msg-add-menu');
+submitForm('form-delete-menu',  '../backend/admin_delete_menu.php',  'msg-delete-menu');
+submitForm('form-update-menu',  '../backend/admin_update_menu.php',  'msg-update-menu');
 </script>
 
 </body>
